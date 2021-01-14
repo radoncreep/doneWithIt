@@ -16,8 +16,10 @@ function MyAccountScreen(props) {
     return (
         <Screen>
             <View style={styles.container}>
+                {/* use a single compoonent ro render a listItem */}
                 <Profile name={user.name} email={user.email} image={user.imageurl} />
                 
+                {/* use a flat list */}
                 <View style={styles.items}>
                     <AccountScreenItem name="format-list-bulleted" iconColor="primary" weight="bold">
                         My Listings
