@@ -3,6 +3,7 @@ import { FlatList, StyleSheet } from "react-native";
 
 import Card from "../components/Card";
 import colors from "../config/colors";
+import routes from '../navigation/routes';
 import Screen from "../components/Screen";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
@@ -28,13 +29,12 @@ function ListingsScreen({ navigation }) {
         data={listings}
         keyExtractor={(listing) => listing.id.toString()}
         renderItem={({ item }) => (
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("Details")}>
             <Card
               title={item.title}
               subTitle={"$" + item.price}
               image={item.image}
+              onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
             />
-          </TouchableWithoutFeedback>
         )}
       />
     </Screen>

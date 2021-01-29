@@ -15,6 +15,7 @@ import ListingEditScreen from "./app/screens/ListingEditScreen";
 import AccountScreen from "./app/screens/AccountScreen";
 import ListingDetailsScreen from "./app/screens/ListingDetailsScreen";
 import MessagesScreen from "./app/screens/MessagesScreen";
+import navigationTheme from "./app/navigation/navigationTheme";
 
 const Stack = createStackNavigator();
 
@@ -80,7 +81,7 @@ const TabNavigator = () => (
 )
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       {/* <StackNavigator /> */}
       <TabNavigator />
     </NavigationContainer>
