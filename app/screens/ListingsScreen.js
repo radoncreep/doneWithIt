@@ -1,38 +1,43 @@
-import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text } from "react-native";
 
+import ActivityIndicator from '../components/ActivityIndicator';
+import Button from '../components/Button';
 import Card from "../components/Card";
 import colors from "../config/colors";
+import listingsApi from '../api/listings';
+import { getListings } from '../api/listings';
+
 import routes from '../navigation/routes';
 import Screen from "../components/Screen";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import AppText from "../components/Text";
+import useApi from "../hooks/useApi";
 
-const listings = [
-  {
-    id: 1,
-    title: "Red jacket for sale",
-    price: 100,
-    image: require("../assets/jacket.jpg"),
-  },
-  {
-    id: 2,
-    title: "Couch in great condition",
-    price: 1000,
-    image: require("../assets/couch.jpg"),
-  },
-];
 
 function ListingsScreen({ navigation }) {
+  // for a case where we have multiple api calls from this component
+  // we cant use object distructuring
+  const getListingsApi = (listingsApi.getListings);
+  
+  useEffect(() => {
+    getListingsApi.request(a, b, c);
+  }, []);
+  
   return (
     <Screen style={styles.screen}>
+      {error && (<>
+        <Text>Couldn't retrieve the listings.</Text>
+        <Button title="Retry" onPress={loadingListings} />
+      </>)}
+      <ActivityIndicator visible={getListingsApi.loading} />
       <FlatList
-        data={listings}
+        data={getListingsApi.data}
         keyExtractor={(listing) => listing.id.toString()}
         renderItem={({ item }) => (
             <Card
               title={item.title}
               subTitle={"$" + item.price}
-              image={item.image}
+              imageUrl={item.images[0].url}
               onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
             />
         )}
