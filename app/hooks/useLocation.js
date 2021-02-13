@@ -12,7 +12,7 @@ export default useLocation = () => {
             const { coords: { latitude, longitude }} = Location.getLastKnownPositionAsync();
             setLocation({ latitude, longitude });
         } catch (error) {
-            console.log(error);
+            (error);
         }
     };
 

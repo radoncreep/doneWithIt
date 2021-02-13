@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState  } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 
@@ -12,6 +12,8 @@ import CategoryPickerItem from "../components/CategoryPickerItem";
 import Screen from "../components/Screen";
 import FormImagePicker from "../components/forms/FormImagePicker";
 import useLocation from "../hooks/useLocation";
+import listings from "../api/listings";
+import UploadScreen from "./UploadScreen";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -81,9 +83,32 @@ const categories = [
 function ListingEditScreen() {
   // Using a custom hook
   const location = useLocation();
+  const [ uploadVisible, setUploadVisible ] = useState(false);
+  const [ progress, setProgress ] = useState(0);
+
+  const handlePostRequestData = async (listing, { resetForm }) => {
+    // so maybe we posted a form and used our progress to 100
+    // the state is going to retain its value as 100
+    // so whenever we want to submit a form and this function is called 
+    // the progress state is updated and back to 0
+    // so it has an initial value of zero before filling on the progress to 100
+    setProgress(0);
+    setUploadVisible(true);
+  
+    const response = await listings.postListings({ ...listing, location },
+      (progress) => setProgress(progress));
+
+      if(!response.ok) {
+        setUploadVisible(false);
+        return alert('Could not save the listing.');
+      }
+      
+      resetForm();
+  };
 
   return (
     <Screen style={styles.container}>
+      <UploadScreen onDone={() => setUploadVisible(false)} progress={progress} visible={uploadVisible}/>
       <Form
         initialValues={{
           title: "",
@@ -92,7 +117,7 @@ function ListingEditScreen() {
           category: null,
           images: []
         }}
-        onSubmit={(values) => console.log(location)}
+        onSubmit={handlePostRequestData}
         validationSchema={validationSchema}
       >
         <FormImagePicker name="images"/>

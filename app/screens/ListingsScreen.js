@@ -5,29 +5,29 @@ import ActivityIndicator from '../components/ActivityIndicator';
 import Button from '../components/Button';
 import Card from "../components/Card";
 import colors from "../config/colors";
-import listingsApi from '../api/listings';
 import { getListings } from '../api/listings';
 
 import routes from '../navigation/routes';
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import useApi from "../hooks/useApi";
+import { ListItemSeparator } from "../components/lists";
 
 
 function ListingsScreen({ navigation }) {
   // for a case where we have multiple api calls from this component
   // we cant use object distructuring
-  const getListingsApi = (listingsApi.getListings);
+  const getListingsApi = useApi();
   
   useEffect(() => {
-    getListingsApi.request(a, b, c);
+    getListingsApi.request();
   }, []);
   
   return (
     <Screen style={styles.screen}>
-      {error && (<>
+      {getListingsApi.error && (<>
         <Text>Couldn't retrieve the listings.</Text>
-        <Button title="Retry" onPress={loadingListings} />
+        <Button title="Retry" onPress={getListingsApi} />
       </>)}
       <ActivityIndicator visible={getListingsApi.loading} />
       <FlatList
@@ -39,6 +39,7 @@ function ListingsScreen({ navigation }) {
               subTitle={"$" + item.price}
               imageUrl={item.images[0].url}
               onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+              thumbnailUrl={item.images[0].thumbnailUrl}
             />
         )}
       />

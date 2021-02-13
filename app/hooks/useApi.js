@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import listingsApi from '../api/listings';
+
 
 export default useApi = () => {
     const [ data, setData ] = useState([]);
@@ -14,7 +16,7 @@ export default useApi = () => {
       if (!response.ok) return setError(true);
        
       setError(false);
-      setListings(response.data);
+      setData(response.data);
     };
 
     return { request, data, error, loading };
