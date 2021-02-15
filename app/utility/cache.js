@@ -1,4 +1,4 @@
-import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
 const prefix = 'cache';
@@ -11,7 +11,8 @@ const store = async (key, value) => {
             value,
             timestamp: Date.now() // determine if the item is expired or not
         };
-
+        
+        // sets key-value such as ('cache/listing', [ {},...{} ])
         await AsyncStorage.setItem(prefix + key, JSON.stringify(item));
     } catch (error) {
         console.log(error);

@@ -20,6 +20,7 @@ import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import OfflineMode from "./app/components/OfflineMode";
+import AuthNavigator from "./app/navigation/AuthNavigator";
 
 
 export default function App() {
@@ -35,7 +36,7 @@ export default function App() {
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
         {/* <StackNavigator /> */}
-        <AppNavigator />
+        <AuthNavigator />
       </NavigationContainer>
     </>
   )

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
-import { Form, FormField, SubmitButton } from "../components/forms";
+import { ErrorMessage, Form, FormField, SubmitButton } from "../components/forms";
+import apiAuth from '../api/auth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -11,13 +12,28 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen(props) {
+  const [ loginFailed, setLoginFailed ] = useState(false);
+
+  const handleSubmit = async({ email, password }) => {
+    const response = await apiAuth.login(email, password);
+
+    if (!response.ok) return setLoginFailed(true);
+
+    setLoginFailed(false);
+    console.log('response data ', response.data);
+  }
+
   return (
     <Screen style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo-red.png")} />
 
+      {/* the string passed to error attr/prop can be hard coded or gotten from the server */}
+      {/* we make use of a state to control the visible attr/prop */}
+      <ErrorMessage error="Invalid email or password" visible={loginFailed} />
       <Form
         initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
+        // values of this form which was formerly logged to the console is now passed to the function
+        onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <FormField
