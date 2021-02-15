@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 const AccountNavigator = () => (
     <Stack.Navigator mode="modal">
         <Stack.Screen name="Account" component={AccountScreen} />
-        <Stack.Screen name="Meesages" component={MessagesScreen} />
+        <Stack.Screen name="Messages" component={MessagesScreen} />
     </Stack.Navigator>
 );
 

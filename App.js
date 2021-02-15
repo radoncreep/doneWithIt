@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -21,9 +21,12 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import OfflineMode from "./app/components/OfflineMode";
 import AuthNavigator from "./app/navigation/AuthNavigator";
+import AuthContext from "./app/auth/context";
 
 
 export default function App() {
+  const [ user, setUser ] = useState();
+  console.log(user)
   // const netInfo = useNetInfo();
   // fetch runs once but addEventListener runs anytime there is a change in the network status
   // let status = {};
@@ -32,13 +35,13 @@ export default function App() {
   // });
   // return null;
   return (
-    <>
+    <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
         {/* <StackNavigator /> */}
-        <AuthNavigator />
+        { !user ? <AuthNavigator /> : <AppNavigator /> }
       </NavigationContainer>
-    </>
+    </AuthContext.Provider>
   )
 };
 
