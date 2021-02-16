@@ -22,19 +22,30 @@ import OfflineNotice from "./app/components/OfflineNotice";
 import OfflineMode from "./app/components/OfflineMode";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import AuthContext from "./app/auth/context";
+import authStorage from './app/auth/storage';
+import { AppLoading } from 'expo';
 
 
 export default function App() {
   const [ user, setUser ] = useState();
-  console.log(user)
-  // const netInfo = useNetInfo();
-  // fetch runs once but addEventListener runs anytime there is a change in the network status
-  // let status = {};
-  // const unsubscribe = NetInfo.addEventListener((netInfo) => {
-  //   status = { ...netInfo };
-  // });
-  // return null;
-  return (
+  const [isReady, setIsReady ] = useState(false)
+  
+  const restoreUser = async () => {
+    // geting the token upon every re-render/mounting
+    // it gets the encrypted token from the local storage
+    // so anytime a user opens the app the app.js mounts and the token is retrieved
+    // from the user's device local storage
+    const user = await authStorage.getUser();
+    if (!user) return;
+    // decode the token and then set the user object from the token as the user state
+    setUser(user)
+  };
+
+  if (!isReady) { // is ready is false so if we negate it, it is true so we get 
+    return <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)}/>
+  }
+
+  return ( 
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
