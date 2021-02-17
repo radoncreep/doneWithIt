@@ -24,6 +24,7 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import AuthContext from "./app/auth/context";
 import authStorage from './app/auth/storage';
 import { AppLoading } from 'expo';
+import { navigationRef } from './app/navigation/rootNavigation';
 
 
 export default function App() {
@@ -43,12 +44,12 @@ export default function App() {
 
   if (!isReady) { // is ready is false so if we negate it, it is true so we get 
     return <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)}/>
-  }
+  };
 
   return ( 
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
-      <NavigationContainer theme={navigationTheme}>
+      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         {/* <StackNavigator /> */}
         { !user ? <AuthNavigator /> : <AppNavigator /> }
       </NavigationContainer>
