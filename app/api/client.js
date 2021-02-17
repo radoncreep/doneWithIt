@@ -1,8 +1,19 @@
 import { create } from 'apisauce';
 import cache from '../utility/cache';
+import authStorage from '../auth/storage';
 
 const apiClient = create({
-    baseURL: 'http://192.168.43.211:9000/api'
+    baseURL: 'http://192.168.43.211:9000/api',
+    // headers: {
+    //     'x-auth-token': await authStorage.getToken()
+    // }
+});
+
+// Protected routes for transforming our request 
+apiClient.addAsyncRequestTransform(async (request) => {
+    const authToken = await authStorage.getToken();
+    if (!authToken) return;
+    request.headers["x-auth-token"] = authToken;
 });
 
 // we are assigning the original "get" method of the apiClient ("http client")

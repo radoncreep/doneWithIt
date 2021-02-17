@@ -13,11 +13,12 @@ export default useAuth = () => {
         setUser(user);
         authStorage.storeToken(authToken);
     };
-    
+
     const logOut = () => {
         setUser(null);
         // we dont need to await the call bcos we dont need to wait for promise to be done or finish
         authStorage.removeToken();
     };
+    // returns functions in an object
     return { user, logIn, logOut };
 };
